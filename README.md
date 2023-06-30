@@ -1,1 +1,3 @@
 # ZeroGen
+Official Code Repository for ZeroGen: Zero-shot Multimodal Controllable Text Generation with Multiple Oracles (https://arxiv.org/abs/2306.16649).
+Model and baseline codes will be released once the paper is accepted...
