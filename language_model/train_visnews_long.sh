@@ -1,0 +1,17 @@
+CUDA_VISIBLE_DEVICES=0 python train.py\
+    --task visnews\
+    --model_name gpt2\
+    --train_path /mnt/data0/tuhq21/dataset/visnews/origin/simctg_train_news.txt\
+    --dev_path /mnt/data0/tuhq21/dataset/visnews/origin/simctg_val_news.txt\
+    --test_path /mnt/data0/tuhq21/dataset/visnews/origin/simctg_val_news.txt\
+    --add_eos_token_to_data True\
+    --margin 0.5\
+    --max_len 200\
+    --number_of_gpu 1\
+    --batch_size_per_gpu 20\
+    --gradient_accumulation_steps 4\
+    --effective_batch_size 80\
+    --total_steps 15000\
+    --print_every 1000\
+    --save_every 1000\
+    --learning_rate 5e-6

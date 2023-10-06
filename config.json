@@ -1,0 +1,4 @@
+{
+  "DATA_DIR": "/data/haoqin_tu/datasets",
+  "CACHE_DIR": "/data/haoqin_tu/.cache/torch/transformers"
+}
