@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 """
-@file: run_demo.py
+@file: run_zerogen.py
 @author: ImKe at 2022/7/16
 @email: tuisaac163@gmail.com
 @feature: #Enter features here
@@ -27,7 +27,7 @@ encoder.FLOAT_REPR = lambda o: format(o, '.3f')
 config = json.load(open("./config.json"))
 DATA_DIR = config['DATA_DIR']
 CACHE_DIR = config['CACHE_DIR']
-KEYWORD_PREFIX_PATH=os.path.join(DATA_DIR, "wordlists")
+KEYWORD_PREFIX_PATH="./wordlists"
 LOAD_PREFIX_PATH="./output"
 GEN_PREFIX_PATH="./generated"
 RESULTS_PREFIX_PATH="./results"
@@ -46,9 +46,6 @@ parser.add_argument('--gpu', nargs='+', type=int, default=[0])
 parser.add_argument('--n_gpu', type=int, default=1)
 parser.add_argument('--seed', type=int, default=3407)
 parser.add_argument("--no_gpu", action='store_true')
-parser.add_argument("--load", type=str, default=None, required=False)
-parser.add_argument("--dataset", type=str, default='coco14', required=False)
-parser.add_argument("--val_batch_size", type=int, default=3, required=False)
 parser.add_argument("--workers", type=int, default=3, required=False)
 
 ## generation
@@ -73,7 +70,7 @@ parser.add_argument("--kw_mode", type=str, default='sum', choices=['max', 'sum',
 ## K2T generation
 parser.add_argument("--k2t_mode", type=str, default='all', choices=['all', 'random', 'next'])
 parser.add_argument("--ct_path", type=str,
-                    default='/mnt/data0/tuhq21/news_writer/ctgsrc/npy_data/converter_table_glove.npy')
+                    default=os.path.join(DATA_DIR, '/npy_data/converter_table_glove.npy'))
 parser.add_argument("--ed_path", type=str,
                     default=None)
 parser.add_argument("--news_label", type=str,
@@ -176,29 +173,6 @@ def zerogen_generate(args):
         pass
     else:  # recursively construct directory
         os.makedirs(save_path_prefix, exist_ok=True)
-    # parse save name
-    if args.k2t:
-        append = f'_k2t-flex-kw{args.kw_mode}'
-        if args.task == "visnews_long":
-            append = f'_k2t-{args.news_label}-flex-{args.kw_mode}'
-            if args.update_keywords:
-                append += f"-uk{args.step_gap}"
-    elif args.c2t:
-        append = f'_c2t-{args.n_topic}' if args.beta_scale else '_c2t'
-    else:
-        append = ""
-    if args.obj4topic:
-        append += f"_obj4t-{args.n_obj4t}"
-
-    # append_beta = f'_beta-act{args.beta_activesize}-up{args.beta_upper}-BOWn{args.BOW_top_n}' if args.beta_scale else ''
-    # append_alpha = f'_alpha-act{args.alpha_activesize}-up{args.alpha_upper}' \
-    #               f'-n_word{args.vis_window_len}' if args.alpha_scale else ''
-    # model_name = args.language_model_name.replace("/", "-") if \
-    #     len(args.language_model_name.split("/")) < 4 else args.language_model_name.split("/")[-1]
-    # save_name = f"{model_name}_{args.task}_k{args.k}_{args.condition_method}_eta{args.eta}" \
-    #             f"_alpha{args.alpha}_beta{args.beta}_obj{args.n_obj}{append}{append_beta}" \
-    #             f"{append_alpha}_idw{args.alpha_dw_mode}_len{args.decoding_len}_instnum-{args.num_instruction}_{now.month}." \
-    #             f"{now.day}.json"
 
     save_name = "output.json"
     full_save_path = os.path.join(GEN_PREFIX_PATH, save_name)
